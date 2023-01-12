@@ -1,9 +1,13 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
+import { act } from 'react-dom/test-utils';
+import requestTokenApi from '../redux/services/requestToken';
 // import Wallet from '../pages/Wallet';
+import { tokenMock } from './helpers/mocks/tokenMock';
+
 
 describe('Login page assessment', () => {
   test('if the name input exists', () => {
@@ -37,6 +41,26 @@ describe('Login page assessment', () => {
     userEvent.type(emailInput, 'test@yahoo.com');
     userEvent.type(nameInput, 'teste');
     expect(playBtn).not.toBeDisabled();
+  });
+
+  test('if entries with value email and user e click button "play" redirect page game', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve(tokenMock),
+    }));
+
+    const { history } = renderWithRouterAndRedux(<App />);
+    const emailInput = screen.getByRole('textbox', { name: /email/i });
+    const nameInput = screen.getByRole('textbox', { name: /nome de usuário/i });
+    const playBtn = screen.getByRole('button', { name: /play/i });
+
+    userEvent.type(emailInput, 'test@yahoo.com');
+    userEvent.type(nameInput, 'teste');
+    userEvent.click(playBtn);
+
+    history.push('/gamepage')
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(history.location.pathname).toBe('/gamepage'));
+    
   });
 
   test('if the enter button config exists if it is enabled', () => {
