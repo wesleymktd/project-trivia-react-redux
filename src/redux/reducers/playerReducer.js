@@ -13,7 +13,8 @@ const player = (state = INITIAL_STATE, action) => {
   case LOGIN_INFOS:
     return {
       ...state,
-      ...action.payload,
+      name: action.payload.name,
+      gravatarEmail: action.payload.gravatarEmail,
     };
   case TOKEN_API:
     return {
