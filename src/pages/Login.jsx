@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+// import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import requestTokenApi from '../redux/services/requestToken';
 
 class Login extends Component {
   state = {
@@ -29,6 +31,14 @@ class Login extends Component {
   handleConfig = () => {
     const { history } = this.props;
     history.push('/settings');
+  };
+
+  handleClickToken = async () => {
+    const token = await requestTokenApi();
+    // console.log(test.token)
+    localStorage.setItem('token', token.token);
+    const { history } = this.props;
+    history.push('/gamepage');
   };
 
   render() {
@@ -63,7 +73,7 @@ class Login extends Component {
             data-testid="btn-play"
             type="button"
             disabled={ buttonDisabled }
-            // onClick={ this.handleChange }
+            onClick={ this.handleClickToken }
           >
             Play
           </button>

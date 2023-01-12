@@ -1,4 +1,4 @@
-import { LOGIN_INFOS } from '../actions';
+import { LOGIN_INFOS, TOKEN_API } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -15,7 +15,13 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       ...action.payload,
     };
+  case TOKEN_API:
+    return {
+      ...state,
+      token: action.data.token,
+    };
   default: return state;
   }
 };
+
 export default player;
