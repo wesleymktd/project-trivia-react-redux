@@ -1,111 +1,63 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import requestQuestionApi from '../redux/services/requestQuestions';
-import { questionAct } from '../redux/actions';
 
 class Questions extends Component {
-  state = {
-    questFull: [],
-    indexQuestion: 0,
+  arrayShuffleButtons = (arr) => {
+    for (let index = arr.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
+    }
   };
 
-  async componentDidMount() {
-    const { dispatch } = this.props;
-    const token = localStorage.getItem('token');
-    const responseApi = await requestQuestionApi(token);
-    const invalidResponseCode = 3;
-    if (responseApi.response_code === invalidResponseCode) {
-      const { history } = this.props;
-      localStorage.removeItem('token');
-      history.push('/');
-    }
-    this.setState({
-      questFull: [...responseApi.results],
-    });
-    dispatch(questionAct(responseApi));
-  }
-
-  
   render() {
-    const { category, question } = this.props;
-    // const { questFull } = this.state;
-    return (
-      <div>
-        <h3 data-testid="question-category">{category}</h3>
-        <p data-testid="question-text">{question}</p>
-        <button
-          data-testid="btn-settings"
-          type="button"
-          onClick={ this.requestQuestions }
-        >
-          Configurações
-        </button>
+    const index = 0;
+    const { questions: { questions } } = this.props;
+    const getIndexQuestionsArray = questions[index];
+    const { category,
+      question,
+      correct_answer: correct,
+      incorrect_answers: incorrect } = getIndexQuestionsArray;
+    const array = [correct, ...incorrect];
+    this.arrayShuffleButtons(array);
 
-      </div>
+    return (
+      <main>
+        <p data-testid="question-category">{category}</p>
+        <p data-testid="question-text">{question}</p>
+        <div data-testid="answer-options">
+          { array.map((answer) => {
+            const number = -1;
+            let incorrectAnswer = number;
+            if (answer !== correct) incorrectAnswer += 1;
+            return (
+              <button
+                key={ answer }
+                type="button"
+                data-testid={ answer === correct ? 'correct-answer'
+                  : `wrong-answer-${incorrectAnswer}` }
+              >
+                {answer}
+              </button>
+            );
+          })}
+        </div>
+      </main>
     );
   }
 }
+
 const mapStateToProps = (state) => ({
-  question: state.questions.results,
-  category: state.wallet.editor,
+  questions: state.questions,
 });
 
 Questions.propTypes = {
-  category: PropTypes.string.isRequired,
-  question: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  questions: PropTypes.objectOf(PropTypes.shape({
+    category: PropTypes.string,
+    question: PropTypes.string,
+    correct_answer: PropTypes.string,
+    incorrect_answers: PropTypes.arrayOf(PropTypes.string),
+  })).isRequired,
 };
 
 export default connect(mapStateToProps)(Questions);
-
-/// ///////
-
-// src/components/Question.js
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// class Question extends React.Component {
-//   fisherYatesShuffle = (arr) => {
-//     for (let i = arr.length - 1; i > 0; i -= 1) {
-//       const j = Math.floor(Math.random() * (i + 1)); // random index
-//       [arr[i], arr[j]] = [arr[j], arr[i]]; // swap
-//     }
-//   }
-//   render() {
-//     const {
-//       question:
-//       { category, question, correct_answer: correct, incorrect_answers: incorrect },
-//     } = this.props;
-//     const array = [correct, ...incorrect];
-//     this.fisherYatesShuffle(array);
-//     return (
-//       <main>
-//         <p data-testid="question-category">{category}</p>
-//         <p data-testid="question-text">{question}</p>
-//         <div data-testid="answer-options">
-//           { array.map((answer) => {
-//             const MINUSONE = -1;
-//             let incorrectIndex = MINUSONE;
-//             if (answer !== correct) incorrectIndex += 1;
-//             return (
-//               <button
-//                 key={ answer }
-//                 type="button"
-//                 data-testid={ answer === correct ? 'correct-answer'
-//                   : `wrong-answer-${incorrectIndex}` }
-//               >
-//                 {answer}
-//               </button>);
-//           }) }
-//         </div>
-//       </main>
-//     );
-//   }
-// }
-// Question.propTypes = {
-//   question: PropTypes.objectOf(PropTypes.any).isRequired,
-// };
-// export default Question;
