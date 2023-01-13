@@ -3,11 +3,31 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Questions extends Component {
+  state = {
+    condicionalKey: false,
+  };
+
   arrayShuffleButtons = (arr) => {
-    for (let index = arr.length - 1; index > 0; index -= 1) {
-      const randomIndex = Math.floor(Math.random() * (index + 1));
-      [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
+    const { condicionalKey } = this.state;
+    if (!condicionalKey) {
+      for (let index = arr.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
+      }
     }
+  };
+
+  colorsVerify = (answer, index) => {
+    const { condicionalKey } = this.state;
+    const { questions: { questions } } = this.props;
+    const getIndexQuestionsArray = questions[index];
+    const { correct_answer: correct } = getIndexQuestionsArray;
+    if (condicionalKey && correct === answer) {
+      return 'green';
+    } if (condicionalKey) {
+      return 'red';
+    }
+    return '';
   };
 
   render() {
@@ -26,16 +46,18 @@ class Questions extends Component {
         <p data-testid="question-category">{category}</p>
         <p data-testid="question-text">{question}</p>
         <div data-testid="answer-options">
-          { array.map((answer) => {
+          { array.map((answer, i) => {
             const number = -1;
             let incorrectAnswer = number;
             if (answer !== correct) incorrectAnswer += 1;
             return (
               <button
                 key={ answer }
+                className={ this.colorsVerify(answer, i) }
                 type="button"
                 data-testid={ answer === correct ? 'correct-answer'
                   : `wrong-answer-${incorrectAnswer}` }
+                onClick={ () => this.setState({ condicionalKey: true }) }
               >
                 {answer}
               </button>
