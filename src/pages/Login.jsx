@@ -35,8 +35,8 @@ class Login extends Component {
   };
 
   handleClickToken = async () => {
-    const token = await requestTokenApi();
-    localStorage.setItem('token', token.token);
+    const tokenApi = await requestTokenApi();
+    localStorage.setItem('token', tokenApi.token);
     const { history, dispatch } = this.props;
     // const { name, gravatarEmail } = this.state;
     dispatch(loginInfosPlayer(this.state));
