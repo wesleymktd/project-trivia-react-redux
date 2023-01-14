@@ -5,6 +5,7 @@ import Header from '../components/header';
 import Questions from '../components/Questions';
 import requestQuestionApi from '../redux/services/requestQuestions';
 import { questionAct } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
@@ -35,6 +36,7 @@ class Game extends Component {
     return (
       <div>
         <Header />
+        <Timer />
         { questions.length === 0
           ? <p>Loading...</p>
           : <Questions question={ question } />}
