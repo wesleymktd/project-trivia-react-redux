@@ -70,11 +70,6 @@ class Game extends Component {
     return (
       <div>
         <Header />
-        {/* <Timer
-          func={ () => this.setState({ condicionalKey: true }) }
-          decreaseTimer={ this.decreaseTimer }
-          seconds={ seconds }
-        /> */}
         <div>{ seconds }</div>
         { questions.length === 0
           ? <p>Loading...</p>
