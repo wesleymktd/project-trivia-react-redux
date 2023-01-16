@@ -3,6 +3,23 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Questions extends Component {
+  state = {
+    arraySort: null,
+  };
+
+  componentDidMount() {
+    const { question } = this.props;
+    const getIndexQuestionsArray = question;
+    const {
+      correct_answer: correct,
+      incorrect_answers: incorrect,
+      // difficulty,
+    } = getIndexQuestionsArray;
+    const array = [correct, ...incorrect];
+    console.log(array);
+    this.arrayShuffleButtons(array);
+  }
+
   arrayShuffleButtons = (arr) => {
     const { condicionalKey } = this.props;
     if (!condicionalKey) {
@@ -10,6 +27,7 @@ class Questions extends Component {
         const randomIndex = Math.floor(Math.random() * (index + 1));
         [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
       }
+      this.setState({ arraySort: arr });
     }
   };
 
@@ -27,22 +45,20 @@ class Questions extends Component {
 
   render() {
     const { questions: { timeLeft }, question, func } = this.props;
+    const { arraySort } = this.state;
     const getIndexQuestionsArray = question;
     const { category,
       question: textQuestion,
       correct_answer: correct,
-      incorrect_answers: incorrect,
       // difficulty,
     } = getIndexQuestionsArray;
-    const array = [correct, ...incorrect];
-    this.arrayShuffleButtons(array);
 
     return (
       <main>
         <p data-testid="question-category">{category}</p>
         <p data-testid="question-text">{textQuestion}</p>
         <div data-testid="answer-options">
-          { array.map((answer, i) => {
+          { arraySort && arraySort.map((answer, i) => {
             const number = -1;
             let incorrectAnswer = number;
             if (answer !== correct) incorrectAnswer += 1;

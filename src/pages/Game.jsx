@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Header from '../components/header';
 import requestQuestionApi from '../redux/services/requestQuestions';
+import Header from '../components/Header';
 import Questions from '../components/Questions';
-import { questionAct } from '../redux/actions';
-import Timer from '../components/Timer';
+import { questionAct, setTimeUpdate } from '../redux/actions';
 
 class Game extends Component {
   state = {
     questions: [],
     indexQuestion: 0,
     condicionalKey: false,
+    seconds: 30,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.funcVerifyToken();
+    this.funcCreateTimer();
+  }
+
+  funcVerifyToken = async () => {
     const { dispatch } = this.props;
     const token = localStorage.getItem('token');
     const responseApi = await requestQuestionApi(token);
@@ -29,15 +34,48 @@ class Game extends Component {
       });
       dispatch(questionAct(responseApi));
     }
-  }
+  };
+
+  funcCreateTimer = () => {
+    const { dispatch } = this.props;
+    const ONE_SECOND = 1000;
+    this.timerRegre = setInterval(() => {
+      const { seconds } = this.state;
+      if (seconds > 0) {
+        this.setState((prevState) => ({
+          seconds: prevState.seconds - 1,
+        }), () => {
+          const { seconds: second } = this.state;
+          dispatch(setTimeUpdate(second));
+        });
+      } else {
+        this.funcClearTimer();
+      }
+    }, ONE_SECOND);
+  };
+
+  funcClearTimer = () => {
+    const { dispatch } = this.props;
+    const { seconds } = this.state;
+    if (seconds === 0) {
+      this.setState({ condicionalKey: true });
+      clearInterval(this.timerRegre);
+      dispatch(setTimeUpdate(seconds));
+    }
+  };
 
   render() {
-    const { questions, indexQuestion, condicionalKey } = this.state;
+    const { questions, indexQuestion, condicionalKey, seconds } = this.state;
     const question = questions[indexQuestion];
     return (
       <div>
         <Header />
-        <Timer func={ () => this.setState({ condicionalKey: true }) } />
+        {/* <Timer
+          func={ () => this.setState({ condicionalKey: true }) }
+          decreaseTimer={ this.decreaseTimer }
+          seconds={ seconds }
+        /> */}
+        <div>{ seconds }</div>
         { questions.length === 0
           ? <p>Loading...</p>
           : (
@@ -52,6 +90,7 @@ class Game extends Component {
             onClick={ () => this.setState((prevState) => ({
               indexQuestion: prevState.indexQuestion + 1,
               condicionalKey: false,
+              seconds: 30,
             })) }
             data-testid="btn-next"
           >
