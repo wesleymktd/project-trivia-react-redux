@@ -4,6 +4,7 @@ export const LOGIN_INFOS = 'LOGIN_INFOS';
 export const TOKEN_API = 'TOKEN_API';
 export const QUESTIONS_SET = 'QUESTIONS_SET';
 export const TIMMER_UPDATE = 'TIMMER_UPDATE';
+export const SUM_SCORE = 'SUM_SCORE';
 
 export const loginInfosPlayer = (payload) => ({
   type: LOGIN_INFOS,
@@ -22,6 +23,11 @@ export const questionAct = (questions) => ({
 
 export const setTimeUpdate = (payload) => ({
   type: TIMMER_UPDATE,
+  payload,
+});
+
+export const actionSumScore = (payload) => ({
+  type: SUM_SCORE,
   payload,
 });
 

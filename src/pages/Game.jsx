@@ -78,22 +78,12 @@ class Game extends Component {
               question={ question }
               func={ () => this.setState({ condicionalKey: true }) }
               condicionalKey={ condicionalKey }
+              nextOnClick={ () => this.setState((prevState) => ({
+                indexQuestion: prevState.indexQuestion + 1,
+                condicionalKey: false,
+                seconds: 30,
+              })) }
             />)}
-        {condicionalKey && (
-          <button
-            type="button"
-            onClick={ () => this.setState((prevState) => ({
-              indexQuestion: prevState.indexQuestion + 1,
-              condicionalKey: false,
-              seconds: 30,
-            })) }
-            data-testid="btn-next"
-          >
-            {' '}
-            Next
-          </button>
-
-        )}
       </div>
     );
   }
