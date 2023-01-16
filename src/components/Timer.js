@@ -41,6 +41,7 @@ class Timer extends Component {
 
 Timer.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  func: PropTypes.func.isRequired,
 };
 
 export default connect()(Timer);

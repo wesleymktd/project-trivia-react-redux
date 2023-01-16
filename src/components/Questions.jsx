@@ -26,14 +26,13 @@ class Questions extends Component {
   };
 
   render() {
-    const index = 0;
-    const { questions: { questions, timeLeft }, question, func } = this.props;
+    const { questions: { timeLeft }, question, func } = this.props;
     const getIndexQuestionsArray = question;
     const { category,
       question: textQuestion,
       correct_answer: correct,
       incorrect_answers: incorrect,
-      difficulty,
+      // difficulty,
     } = getIndexQuestionsArray;
     const array = [correct, ...incorrect];
     this.arrayShuffleButtons(array);
@@ -78,6 +77,9 @@ Questions.propTypes = {
     correct_answer: PropTypes.string,
     incorrect_answers: PropTypes.arrayOf(PropTypes.string),
   })).isRequired,
+  func: PropTypes.func.isRequired,
+  condicionalKey: PropTypes.bool.isRequired,
+  question: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapStateToProps)(Questions);
