@@ -40,6 +40,15 @@ class Game extends Component {
         { questions.length === 0
           ? <p>Loading...</p>
           : <Questions question={ question } />}
+        <button
+          type="button"
+          onClick={ () => this.setState((prevState) => ({
+            indexQuestion: prevState.indexQuestion + 1,
+          })) }
+        >
+          {' '}
+          Next
+        </button>
       </div>
     );
   }

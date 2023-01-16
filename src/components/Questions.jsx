@@ -9,7 +9,7 @@ class Questions extends Component {
 
   arrayShuffleButtons = (arr) => {
     const { condicionalKey } = this.state;
-    if (!condicionalKey) {
+    if (!(condicionalKey && preventRender)) {
       for (let index = arr.length - 1; index > 0; index -= 1) {
         const randomIndex = Math.floor(Math.random() * (index + 1));
         [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
@@ -32,19 +32,21 @@ class Questions extends Component {
 
   render() {
     const index = 0;
-    const { questions: { questions } } = this.props;
-    const getIndexQuestionsArray = questions[index];
+    const { questions: { questions, timeLeft }, question } = this.props;
+    const getIndexQuestionsArray = question;
     const { category,
-      question,
+      question: textQuestion,
       correct_answer: correct,
-      incorrect_answers: incorrect } = getIndexQuestionsArray;
+      incorrect_answers: incorrect,
+      difficulty,
+    } = getIndexQuestionsArray;
     const array = [correct, ...incorrect];
     this.arrayShuffleButtons(array);
 
     return (
       <main>
         <p data-testid="question-category">{category}</p>
-        <p data-testid="question-text">{question}</p>
+        <p data-testid="question-text">{textQuestion}</p>
         <div data-testid="answer-options">
           { array.map((answer, i) => {
             const number = -1;
@@ -58,6 +60,7 @@ class Questions extends Component {
                 data-testid={ answer === correct ? 'correct-answer'
                   : `wrong-answer-${incorrectAnswer}` }
                 onClick={ () => this.setState({ condicionalKey: true }) }
+                disabled={ !(timeLeft) }
               >
                 {answer}
               </button>

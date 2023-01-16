@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { setTimeUpdate } from '../redux/actions';
 
 class Timer extends Component {
   state = {
@@ -19,8 +22,10 @@ class Timer extends Component {
 
   componentDidUpdate() {
     const { seconds } = this.state;
+    const { dispatch } = this.props;
     if (seconds === 0) {
       clearInterval(this.timerRegre);
+      dispatch(setTimeUpdate(seconds));
     }
   }
 
@@ -32,4 +37,8 @@ class Timer extends Component {
   }
 }
 
-export default Timer;
+Timer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect()(Timer);
