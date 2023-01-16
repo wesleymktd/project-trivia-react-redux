@@ -1,4 +1,4 @@
-import { LOGIN_INFOS, TOKEN_API } from '../actions';
+import { LOGIN_INFOS, TOKEN_API, SUM_SCORE } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -20,6 +20,12 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       token: action.data.token,
+    };
+  case SUM_SCORE:
+    return {
+      ...state,
+      score: state.score + action.payload,
+      assertions: state.assertions + 1,
     };
   default: return state;
   }

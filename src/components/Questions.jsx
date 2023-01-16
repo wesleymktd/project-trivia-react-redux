@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { actionSumScore } from '../redux/actions';
+
+const NUMBER_TEN = 10;
 
 class Questions extends Component {
   state = {
     arraySort: null,
+    painted: false,
   };
 
   componentDidMount() {
+    this.funcTest();
+  }
+
+  funcTest = () => {
     const { question } = this.props;
-    const getIndexQuestionsArray = question;
     const {
       correct_answer: correct,
       incorrect_answers: incorrect,
-      // difficulty,
-    } = getIndexQuestionsArray;
+    } = question;
     const array = [correct, ...incorrect];
-    console.log(array);
     this.arrayShuffleButtons(array);
-  }
+  };
 
   arrayShuffleButtons = (arr) => {
-    const { condicionalKey } = this.props;
-    if (!condicionalKey) {
+    const { painted } = this.state;
+    if (!painted) {
       for (let index = arr.length - 1; index > 0; index -= 1) {
         const randomIndex = Math.floor(Math.random() * (index + 1));
         [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
@@ -32,26 +37,43 @@ class Questions extends Component {
   };
 
   colorsVerify = (answer) => {
-    const { question, condicionalKey } = this.props;
-    const getIndexQuestionsArray = question;
-    const { correct_answer: correct } = getIndexQuestionsArray;
-    if (condicionalKey && correct === answer) {
+    const { question } = this.props;
+    const { painted } = this.state;
+    const { correct_answer: correct } = question;
+    if (painted && correct === answer) {
       return 'green';
-    } if (condicionalKey) {
+    } if (painted) {
       return 'red';
     }
     return '';
   };
 
+  sumScore = (event) => {
+    const { questions: { timeLeft }, question: { difficulty }, dispatch } = this.props;
+    const isCorrect = event.target
+      .attributes['data-testid'].value.includes('correct-answer');
+    if (isCorrect) {
+      const objectConvert = { hard: 3, medium: 2, easy: 1 };
+      const total = NUMBER_TEN + (timeLeft * objectConvert[difficulty]);
+      dispatch(actionSumScore(total));
+    }
+  };
+
   render() {
-    const { questions: { timeLeft }, question, func } = this.props;
+    const {
+      questions: { timeLeft },
+      question,
+      func,
+      nextOnClick,
+      condicionalKey } = this.props;
     const { arraySort } = this.state;
-    const getIndexQuestionsArray = question;
     const { category,
       question: textQuestion,
       correct_answer: correct,
       // difficulty,
-    } = getIndexQuestionsArray;
+    } = question;
+    const number = -1;
+    let incorrectAnswer = number;
 
     return (
       <main>
@@ -59,8 +81,6 @@ class Questions extends Component {
         <p data-testid="question-text">{textQuestion}</p>
         <div data-testid="answer-options">
           { arraySort && arraySort.map((answer, i) => {
-            const number = -1;
-            let incorrectAnswer = number;
             if (answer !== correct) incorrectAnswer += 1;
             return (
               <button
@@ -69,13 +89,31 @@ class Questions extends Component {
                 type="button"
                 data-testid={ answer === correct ? 'correct-answer'
                   : `wrong-answer-${incorrectAnswer}` }
-                onClick={ func }
+                onClick={ (event) => {
+                  this.setState({ painted: true }, func);
+                  this.sumScore(event);
+                } }
                 disabled={ !(timeLeft) }
               >
                 {answer}
               </button>
+
             );
           })}
+          {condicionalKey && (
+            <button
+              type="button"
+              onClick={ () => {
+                nextOnClick();
+                this.setState({ painted: false }, this.funcTest);
+              } }
+              data-testid="btn-next"
+            >
+              {' '}
+              Next
+            </button>
+
+          )}
         </div>
       </main>
     );
@@ -87,15 +125,18 @@ const mapStateToProps = (state) => ({
 });
 
 Questions.propTypes = {
+  condicionalKey: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  func: PropTypes.func.isRequired,
+  question: PropTypes.arrayOf(PropTypes.string).isRequired,
   questions: PropTypes.objectOf(PropTypes.shape({
     category: PropTypes.string,
     question: PropTypes.string,
     correct_answer: PropTypes.string,
     incorrect_answers: PropTypes.arrayOf(PropTypes.string),
   })).isRequired,
-  func: PropTypes.func.isRequired,
-  condicionalKey: PropTypes.bool.isRequired,
-  question: PropTypes.arrayOf(PropTypes.string).isRequired,
+  timeLeft: PropTypes.number.isRequired,
+  nextOnClick: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(Questions);
