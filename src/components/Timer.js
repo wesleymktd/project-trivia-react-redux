@@ -10,12 +10,14 @@ class Timer extends Component {
 
   componentDidMount() {
     const { seconds } = this.state;
+    const { func } = this.props;
     const ONE_SECOND = 1000;
     this.timerRegre = setInterval(() => {
       if (seconds > 0) {
         this.setState((prevState) => ({
           seconds: prevState.seconds - 1,
         }));
+        func();
       }
     }, ONE_SECOND);
   }
