@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/header';
-import Questions from '../components/Questions';
 import requestQuestionApi from '../redux/services/requestQuestions';
+import Questions from '../components/Questions';
 import { questionAct } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
     questions: [],
     indexQuestion: 0,
+    condicionalKey: false,
   };
 
   async componentDidMount() {
@@ -30,14 +32,34 @@ class Game extends Component {
   }
 
   render() {
-    const { questions, indexQuestion } = this.state;
+    const { questions, indexQuestion, condicionalKey } = this.state;
     const question = questions[indexQuestion];
     return (
       <div>
         <Header />
+        <Timer func={ () => this.setState({ condicionalKey: true }) } />
         { questions.length === 0
           ? <p>Loading...</p>
-          : <Questions question={ question } />}
+          : (
+            <Questions
+              question={ question }
+              func={ () => this.setState({ condicionalKey: true }) }
+              condicionalKey={ condicionalKey }
+            />)}
+        {condicionalKey && (
+          <button
+            type="button"
+            onClick={ () => this.setState((prevState) => ({
+              indexQuestion: prevState.indexQuestion + 1,
+              condicionalKey: false,
+            })) }
+            data-testid="btn-next"
+          >
+            {' '}
+            Next
+          </button>
+
+        )}
       </div>
     );
   }
