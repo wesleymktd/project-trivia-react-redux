@@ -5,6 +5,8 @@ export const TOKEN_API = 'TOKEN_API';
 export const QUESTIONS_SET = 'QUESTIONS_SET';
 export const TIMMER_UPDATE = 'TIMMER_UPDATE';
 export const SUM_SCORE = 'SUM_SCORE';
+export const PICTURE_GRAVATAR = 'PICTURE_GRAVATAR';
+export const RESET_SCORE = 'RESET_SCORE';
 
 export const loginInfosPlayer = (payload) => ({
   type: LOGIN_INFOS,
@@ -29,6 +31,15 @@ export const setTimeUpdate = (payload) => ({
 export const actionSumScore = (payload) => ({
   type: SUM_SCORE,
   payload,
+});
+
+export const actionPictureGravatar = (payload) => ({
+  type: PICTURE_GRAVATAR,
+  payload,
+});
+
+export const actionResetScore = () => ({
+  type: RESET_SCORE,
 });
 
 export function actionFetchApi() {

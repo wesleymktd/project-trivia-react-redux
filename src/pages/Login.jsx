@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import requestTokenApi from '../redux/services/requestToken';
-import { loginInfosPlayer } from '../redux/actions';
+import { actionResetScore, loginInfosPlayer } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -10,6 +10,11 @@ class Login extends Component {
     gravatarEmail: '',
     buttonDisabled: true,
   };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(actionResetScore());
+  }
 
   handleChange = ({ target }) => {
     const { name, value } = target;

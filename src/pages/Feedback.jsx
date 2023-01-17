@@ -29,7 +29,7 @@ class Feedback extends React.Component {
     return (
       <div>
         <Header />
-        { score < assertionsMax
+        { assertions < assertionsMax
           ? (<span data-testid="feedback-text">Could be better...</span>)
           : (<span data-testid="feedback-text">Well Done!</span>) }
         <span data-testid="feedback-total-question">{ assertions }</span>
