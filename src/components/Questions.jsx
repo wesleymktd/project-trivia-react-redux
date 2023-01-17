@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { actionSumScore } from '../redux/actions';
 
 const NUMBER_TEN = 10;
+const NUMBER_FOUR = 4;
 
 class Questions extends Component {
   state = {
@@ -105,6 +106,17 @@ class Questions extends Component {
               type="button"
               onClick={ () => {
                 nextOnClick();
+                const { indexQuestion, history,
+                  player: { name, score, picture } } = this.props;
+                if (indexQuestion === NUMBER_FOUR) {
+                  const arrayObjects = [...JSON.parse(localStorage.getItem('ranking'))
+                  ?? [], { name, score, picture }];
+                  localStorage.setItem(
+                    'ranking',
+                    JSON.stringify(arrayObjects),
+                  );
+                  history.push('/feedback');
+                }
                 this.setState({ painted: false }, this.funcTest);
               } }
               data-testid="btn-next"
@@ -122,12 +134,18 @@ class Questions extends Component {
 
 const mapStateToProps = (state) => ({
   questions: state.questions,
+  player: state.player,
 });
 
 Questions.propTypes = {
   condicionalKey: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   func: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  indexQuestion: PropTypes.number.isRequired,
+  nextOnClick: PropTypes.func.isRequired,
   question: PropTypes.arrayOf(PropTypes.string).isRequired,
   questions: PropTypes.objectOf(PropTypes.shape({
     category: PropTypes.string,
@@ -136,7 +154,11 @@ Questions.propTypes = {
     incorrect_answers: PropTypes.arrayOf(PropTypes.string),
   })).isRequired,
   timeLeft: PropTypes.number.isRequired,
-  nextOnClick: PropTypes.func.isRequired,
+  player: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    score: PropTypes.number.isRequired,
+    picture: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(Questions);

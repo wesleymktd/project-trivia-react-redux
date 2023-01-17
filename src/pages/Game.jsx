@@ -66,6 +66,7 @@ class Game extends Component {
 
   render() {
     const { questions, indexQuestion, condicionalKey, seconds } = this.state;
+    const { history } = this.props;
     const question = questions[indexQuestion];
     return (
       <div>
@@ -76,6 +77,8 @@ class Game extends Component {
           : (
             <Questions
               question={ question }
+              indexQuestion={ indexQuestion }
+              history={ history }
               func={ () => this.setState({ condicionalKey: true }) }
               condicionalKey={ condicionalKey }
               nextOnClick={ () => this.setState((prevState) => ({
