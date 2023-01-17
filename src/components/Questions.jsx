@@ -13,10 +13,10 @@ class Questions extends Component {
   };
 
   componentDidMount() {
-    this.funcTest();
+    this.funcShuffleArray();
   }
 
-  funcTest = () => {
+  funcShuffleArray = () => {
     const { question } = this.props;
     const {
       correct_answer: correct,
@@ -117,7 +117,7 @@ class Questions extends Component {
                   );
                   history.push('/feedback');
                 }
-                this.setState({ painted: false }, this.funcTest);
+                this.setState({ painted: false }, this.funcShuffleArray);
               } }
               data-testid="btn-next"
             >
