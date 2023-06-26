@@ -24,6 +24,12 @@ $ npm start
 # O servidor vai inicar na porta <http://localhost:3000>
 ```
 
+## Autores:
+ - [@wesleymktd](https://www.github.com/wesleymktd)
+ - [@JuanRsouza](https://github.com/JuanRsouza)
+ - [@elainechacon](https://github.com/elainechacon)
+ - [@tperim](https://https://github.com/tperim)
+
 ## Principais tecnologias utilizadas:
 - React;
 - Redux:
