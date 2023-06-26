@@ -1,13 +1,32 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+## 🧐 Sobre
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+<p align="left"> 
+	Você deverá desenvolver um jogo de perguntas e respostas baseado no jogo Trivia, utilizando React e Redux. Ao usar este aplicativo, o usuário é capaz de:
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+- Criar um baralho com o tema livre;
+- Adicionar e remover uma carta do baralho;
+- Ver todas as cartas que foram adicionadas ao baralho;
+- Jogar com o deck criado;
+</p>
+
+
+## ⚒ Instalando <a name = "installing"></a>
+
+```bash
+# Clone o projeto
+$ git clone git@github.com:wesleymktd/project-trivia-react-redux.git
+# Acesse
+$ cd ./project-trivia-react-redux
+# Instale as dependencias
+$ npm install
+# Inicie o projeto
+$ npm start
+# O servidor vai inicar na porta <http://localhost:3000>
+```
+
+## Principais tecnologias utilizadas:
+- React;
+- Redux:
+- JavaScript:
+- Css;
+
