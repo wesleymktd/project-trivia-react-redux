@@ -1,7 +1,7 @@
 ## 🧐 Sobre
 
 <p align="left"> 
-	Você deverá desenvolver um jogo de perguntas e respostas baseado no jogo Trivia, utilizando React e Redux. Ao usar este aplicativo, o usuário é capaz de:
+	Projeto Trivia trata-se de um jogo de perguntas e respostas baseado no jogo Trivia, utilizando React e Redux. Ao usar este aplicativo, o usuário é capaz de:
 
 - Criar um baralho com o tema livre;
 - Adicionar e remover uma carta do baralho;
